@@ -8,10 +8,34 @@
 </head>
 <body>
     <h1>DeployGuard</h1>
-    <h2>Deployment Monitoring System</h2>
+    <h2>Automated Deployment Monitoring System</h2>
 
-    <p>Welcome to DeployGuard.</p>
-    <p>Application Status: Running</p>
+    <h3>Application Status</h3>
+    <p id="status">Checking application...</p>
+
+    <h3>Deployment Information</h3>
+    <p>Application: DeployGuard</p>
     <p>Version: 1.0</p>
+    <p>Environment: Local Docker</p>
+
+    <script>
+        async function checkHealth() {
+            const status = document.getElementById("status");
+
+            try {
+                const response = await fetch("/health");
+                const data = await response.json();
+
+                status.textContent = data.status === "healthy"
+                    ? "Healthy"
+                    : "Unhealthy";
+            } catch (error) {
+                status.textContent = "Health check failed";
+            }
+        }
+
+        checkHealth();
+        setInterval(checkHealth, 10000);
+    </script>
 </body>
 </html>
